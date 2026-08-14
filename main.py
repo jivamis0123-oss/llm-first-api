@@ -22,6 +22,11 @@ def home():
         "model": MODEL_NAME
     }
 
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy"
+    }
 
 @app.post("/chat")
 def chat(request: ChatRequest):
