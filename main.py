@@ -1,10 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from openai import OpenAI
+import ollama
 
 app = FastAPI()
-
-client = OpenAI()
 
 
 class ChatRequest(BaseModel):
@@ -18,11 +16,17 @@ def home():
 
 @app.post("/chat")
 def chat(request: ChatRequest):
-    response = client.responses.create(
-        model="gpt-5",
-        input=request.message
+
+    response = ollama.chat(
+        model="llama3.2",
+        messages=[
+            {
+                "role": "user",
+                "content": request.message
+            }
+        ]
     )
 
     return {
-        "response": response.output_text
+        "response": response["message"]["content"]
     }
